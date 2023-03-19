@@ -1,0 +1,8 @@
+{
+  "label": "rook-health-connect",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Extracts Health Data from Google Health Connect"
+  }
+}
