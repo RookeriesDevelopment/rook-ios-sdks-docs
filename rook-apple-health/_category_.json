@@ -1,8 +1,8 @@
 {
-  "label": "rook-health-connect",
+  "label": "rook-apple-health",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Extracts Health Data from Google Health Connect"
+    "description": "Extracts Health Data from Apple Health"
   }
 }
