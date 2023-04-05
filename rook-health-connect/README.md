@@ -1,270 +1,158 @@
-# Rook Health Connect SDK
+# Rook Apple Health  SDK
 
-This SDK enables apps to extract data from Google Health Connect. `rook_health_connect` is part of Rook Extraction, a series of SDKs dedicated to extracting Health Data from a variety of [Data Sources](https://docs.tryrook.io/docs/Definitions#data-sources).
+This SDK enables apps to extract data from Apple Health . `rook_apple_health_connect` is part of Rook Extraction, a series of SDKs dedicated to extracting Health Data from a variety of [Data Sources](https://docs.tryrook.io/docs/Definitions#data-sources).
 
-This SDK was developed with the Health Connect [native SDK](https://developer.android.com/guide/health-and-fitness/health-connect), so all its limitations and requirements apply to this SDK as well.
 
 ## Features
 
-- Check for Health Connect app availability.
-- Check and request permissions.
+- Check for Apple Health availability.
+- Request permissions.
 - Retrieve a [Sleep Summary](https://docs.tryrook.io/docs/DataStructure/SleepHealth#summaries) from a specific day.
 - Retrieve a [Physical Summary](https://docs.tryrook.io/docs/DataStructure/PhysicalHealth#summaries) from a specific day.
 - Retrieve a [Body Summary](https://docs.tryrook.io/docs/DataStructure/BodyHealth#summaries) from a specific day.
 
 ## Installation
 
-![Maven Central](https://img.shields.io/maven-central/v/com.rookmotion.android/rook-health-connect?color=%23F44336)
+To add a package dependency to your Xcode project, select File > Swift Packages > Add Package Dependency and enter the repository URL [https://github.com/RookeriesDevelopment/rook-ios-extraction-sdk](https://github.com/RookeriesDevelopment/rook-ios-extraction-sdk)
 
-Add the following line to your dependencies (app-level build.gradle):
-
-```groovy
-implementation 'com.rookmotion.android:rook-health-connect:version'
-```
+![include_swftpm](include_swftpm.png)
 
 ## Getting started
 
-To get authorization to use this SDK, you'll need to install and configure the [rook-auth](https://mvnrepository.com/artifact/com.rookmotion.android/rook-auth) SDK.
+ To use Rook Apple Health SDK in your Xcode project, you need to follow these steps:
 
-### Android Configuration
+1. Add the HealthKit framework to your Xcode project:
 
-In your **AndroidManifest.xml**, add a query for Health Connect:
+- Open your project in Xcode.
+- Click on your project file in the Project Navigator.
+- Select your target and then click on the "Build Phases" tab.
+- Click on the "+" button under the "Link Binary With Libraries" section and select "HealthKit.framework" from the list.
 
-```xml
+![healthkit](healthkit.gif)
 
-<manifest>
-    <queries>
-        <package android:name="com.google.android.apps.healthdata" />
-    </queries>
-</manifest>
-
-```
-
-Then declare the health permissions used by this SDK:
+Then declare the privacy permissions used by this SDK. You will need to include the NSHealthShareUsageDescription and NSHealthUpdateUsageDescription keys in your app's Info.plist file. These keys provide a description of why your app needs to access HealthKit data and will be displayed to the user in the permission request dialog.
 
 ```text
-<uses-permission android:name="android.permission.health.READ_SLEEP" />
-<uses-permission android:name="android.permission.health.READ_STEPS" />
-<uses-permission android:name="android.permission.health.READ_DISTANCE" />
-<uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED" />
-<uses-permission android:name="android.permission.health.READ_ELEVATION_GAINED" />
-<uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION" />
-<uses-permission android:name="android.permission.health.READ_VO2_MAX" />
-<uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" />
-<uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
-<uses-permission android:name="android.permission.health.READ_HEART_RATE" />
-<uses-permission android:name="android.permission.health.READ_RESTING_HEART_RATE" />
-<uses-permission android:name="android.permission.health.READ_HEART_RATE_VARIABILITY" />
-<uses-permission android:name="android.permission.health.READ_EXERCISE" />
-<uses-permission android:name="android.permission.health.READ_SPEED" />
-<uses-permission android:name="android.permission.health.READ_WEIGHT" />
-<uses-permission android:name="android.permission.health.READ_HEIGHT" />
-<uses-permission android:name="android.permission.health.READ_BLOOD_GLUCOSE" />
-<uses-permission android:name="android.permission.health.READ_BLOOD_PRESSURE" />
-<uses-permission android:name="android.permission.health.READ_HYDRATION" />
-<uses-permission android:name="android.permission.health.READ_BODY_TEMPERATURE" />
-
+<key>NSHealthShareUsageDescription</key>
+<string>This app requires access to your health and fitness data in order to track your workouts and activity levels.</string>
+<key>NSHealthUpdateUsageDescription</key>
+<string>This app requires permission to write workout data to HealthKit.</string>
 ```
 
-Finally, inside the Activity that you use to display your app's privacy policy, add an intent filter for the Health Connect permissions action:
+![infoplist_example](infoplist_example.png)
 
-```xml
-
-<activity android:name=".ui.health_connect.HCPrivacyPolicyActivity" android:enabled="true"
-    android:exported="true">
-
-    <intent-filter>
-        <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
-    </intent-filter>
-</activity>
-
-```
-
-In your build.gradle (app), set your min and target sdk version like below:
-
-```groovy
-minSdk 26
-targetSdk 33
-
-```
-
-This package will only work with devices of SDK 28 or later. The `minSdk 26` is to keep compatibility with other Rook SDKs that can be used with older SDKs.
-
-### Logging
-
-If you want to see the logs generated by this SDK, when creating an instance of `RookHealthConnectManager`, provide a logLevel:
-
-```
-RookHealthConnectManager(logLevel = "ADVANCED")
-
-```
-
-Available levels:
-
-- "ADVANCED" -> All logs from API. All logs from SDK.
-- "BASIC" -> Basic logs from API. All logs from SDK.
-- "NONE" -> No logs.
 
 ## Usage
 
-Create an instance of `RookHealthConnectManager` providing a context:
+To configure Rook Apple Health SDK, you need to follow this steps:
 
-```kotlin
-val manager = RookHealthConnectManager(context)
+1. Import th apple health sdk
 
+```swift
+import RookAppleHealthExtraction
+import RookAppleHealth
 ```
 
-### Privacy policy
+ 2. Add your credentials. 
+ - This method should be called at the beginning of your app's launch process.
 
-Health Connect requires a privacy policy where you inform your users how you will handle and use their data.
-
-In the [Android configuration](#android-configuration) section, an intent filter was added to listen when your app is launched from said intent. You can use a dedicated Activity, or if you are using a **Single activity architecture**, you can use Deeplink. You can find an example of the first approach in our demo app.
-
-### Check compatibility
-
-Before using any of the features of `rook_health_connect`, you need to ensure the user's device is compatible with Health Connect and check if the [APP](https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata) is installed.
-
-Call `checkAvailability` to check for the app. This will return an `AvailabilityStatus`.
-
-| Status | Description | What to do |
-| --- | --- | --- |
-| INSTALLED | App is installed | Proceed to check permissions |
-| NOT_INSTALLED | App is not installed | Prompt the user to install Health Connect. |
-| NOT_SUPPORTED | This device does not support Health Connect | Take the user out of the Health Connect section |
+```swift
+func application(_ application: UIApplication
+                 didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    
+    RookAHConfiguration.shared.setClientUUID(with: "9593d0ec-47c1-4477-a8ce-10d3f4f43127")
+    RookAHConfiguration.shared.initRookAH()
+    return true
+}
+```
 
 ### Permissions
 
-#### Check
-
-There are dedicated functions for each [Health Pillar](https://docs.tryrook.io/docs/Definitions#health-data-pillars) (Sleep, Physical, and Body) to check permissions. These functions follow the convention: `has_data_type_Permissions`.
-
-You can also call `hasAllPermissions` to check if your app has all the permissions required to extract data from all health pillars.
-
-```kotlin
-fun checkPermissions() {
-    scope.launch {
-        val result = manager.hasAllPermissions()
-
-        if (result) {
-            // The app has permissions.
-        } else {
-            // The app does not have permissions.
-        }
-    }
-}
-
-```
-
 #### Request
 
-There are dedicated functions for each health pillar (Sleep, Physical, and Body) to request permissions. These functions follow the convention: `request_data_type_Permissions`.
+There are dedicated functions for each health pillar (Sleep, Physical, and Body) to request permissions. To call these methods you need to create a instance of the class ```RookAHPermissionManager```
 
-You can also call `requestAllPermissions` and provide an `Activity` instance to request all health pillar permissions.
+| Function | Description |
+| -------- | ----------- |
+| `requestAllPermissions(completion: @escaping (Result<Bool, Error>)` | Sends a request for all the health permissions. |
+| `requestSleepPermissions(completion: @escaping (Result<Bool, Error>) -> Void)` | Sends a request for the sleep permission. |
+| `requestPhysicalPermissions(completion: @escaping (Result<Bool, Error>)` | Sends a request for the physical permissions. |
+| `requesBodyPermissions(completion: @escaping (Result<Bool, Error>) -> Void)` | Sends a request for the body permissions. |
 
-```kotlin
-fun requestPermissions(activity: Activity) {
-    val result = manager.requestAllPermissions(activity)
+Example:
 
-    if (result) {
-        // A request to Health Connect to open the permissions screen was sent.
-        // Health Connect can receive the request but refuse to open the permissions screen. In those cases, 'result' will also be true
-    } else {
-        // The request was not sent.
-    }
+```swift
+
+private let permissionManager = RookAHPermissionManager()
+
+func requestBodyPermission() {
+  permissionManager.requesBodyPermissions() { result in
+      switch result {
+      case .success(let success):
+        debugPrint(success)
+      case .failure(let error):
+        debugPrint(error)
+      }
+  }
 }
 
 ```
 
 **Permissions denied**
 
-If the user clicks cancel or navigates away from the permissions screen, Health Connect will take it as if the user denied the permissions.
+If the user clicks cancel or navigates away from the permissions screen, Apple Health Connect will take it as undefined.
 
-If the user 'denies' the permissions 2 times, your app will be blocked by Health Connect. This is permanent and cannot be undone even if the user uninstalls your app.
+The user is able to enable or disable the permission in the settings app.
 
-When your app is blocked, any permissions request will be ignored.
-
-To solve this problem, we recommend you also include an `Open Health Connect` button in your permissions UI. This button will call `openHealthConnectSettings`, and your users can manually grant permissions to your app.
-
-```kotlin
-fun openHealthConnectSettings() {
-    val result = manager.openHealthConnectSettings()
-
-    if (result) {
-        // A request to open Health Connect was sent.
-    } else {
-        // The request was not sent.
-    }
-}
-
-```
 
 ### Retrieving data
 
-To retrieve any type of summary, you need to provide a date. This date cannot be the current day and cannot be older than 29 days. See the examples below:
+To retrieve any type of summary, you need to provide a date. This date should not be the current day
 
-| Current date | Provided date | Is valid? |
-| --- | --- | --- |
-| @January 8, 2023 | @January 8, 2023 | No, the date is today |
-| @January 8, 2023 | @January 7, 2023 | Yes, the date is from yesterday |
-| @January 8, 2023 | @November 1, 2022 | No, the date is older than 29 days |
-| @January 8, 2023 | @January 1, 2023 | Yes, the date is 7 days old |
+To get health data, create a instance of the class `RookAHExtractionManager` that contains the following methods
 
-To get health data, call `get_data_type` and provide a `ZonedDateTime` instance of the day you want to retrieve the data from.
+| Method | Description |
+| ------ | ----------- |
+| getSleepSummay(date: Date, completion: @escaping (Result<RookSleepData?, Error>) -> Void) | Retrieves in the completion block the sleep data of the user or an error. |
+| getPhysicalSummary(date: Date, completion: @escaping (Result<RookPhysicalData, Error>) -> Void) | Retrieves in the completion block the physical data of the user or an error. |
+| getBodySummary(date: Date, completion: @escaping (Result<RookBodyData, Error>) -> Void) | Retrieves in the completion block the body data of the user or an error. |
+| getLastExtractionDate(of summary: RookDataType) -> Date? | Returns the last date extraction of the summary |
 
-For example, if you want to get yesterday's sleep summary, call `getSleepSummary`. It will return a `SleepSummary` instance or throw an exception if an error happens or if there is no sleep data on that day.
+For example, if you want to get yesterday's sleep summary, call `getSleepSummary`. It will return a `RookSleepData` instance or return an error.
 
-```kotlin
-fun getSleepSummary() {
-    scope.launch {
-        try {
-            val date = ZonedDateTime.now().minusDays(1)
-            val result = manager.getSleepSummary(date)
+```swift
+let extractionManager: RookAHExtractionManager = RookAHExtractionManager()
 
-            // Success
-        } catch (e: Exception) {
-            // Manage error
+func getSleepSummary() {
+  let date: Date = Date()
+  extractionManager.getSleepSummay(date: date) { result in
+
+    switch (result) {
+      case .success(let data):
+        if let data = data {
+          debugPrint("sleep data \(data)")
         }
+      case .failure(let error):
+        debugPrint("error while fecthing sleep \(error)")
     }
+
+  }
+
 }
 
 ```
 
 ### Keeping track of the last time a summary was retrieved
 
-Health Connect does not allow retrieving data in the background, so every time your users open your app, you should retrieve the data manually to help you retrieve the data of the days the user did not open your app. We store in preferences the last date data was retrieved from (even if that attempt resulted in no data being found).
-
-Depending on the data type, there are multiple functions to retrieve that date. They follow the convention: `get_data_type_LastDate`.
-
-It will return a `ZonedDateTime` instance.
+To help you retrieve the data of the days the user did not open your app. We store in preferences the last date data was retrieved from (even if that attempt resulted in no data being found).
 
 #### Example
 
-Let's suppose that one of your users opens the app on `2023-01-10`. The app then retrieves a sleep summary from yesterday (`2023-01-09`) with `getSleepSummary`, gets the summary, and sends it to the backend.
+``` swift
+let extractionManager: RookAHExtractionManager = RookAHExtractionManager()
 
-Then the user forgets to open the app until `2023-01-15`. Then you'll call `getSleepSummaryLastDate`. It will return `2023-01-09` in a `ZonedDateTime` instance. Now, in a loop, you can recover data from the days the user did not open the app (`2023-01-10` to `2023-01-14`).
-
-An example using sleep summaries is detailed below:
-
-```kotlin
-fun recoverLostDays() {
-    scope.launch {
-        val today = LocalDate.now()
-        var date = manager.getSleepSummaryLastDate().toLocalDate()
-
-        date = date.plusDays(1)
-
-        while (date.isBefore(today)) {
-            try {
-                val result = manager.getSleepSummary(date.atStartOfDay(ZoneId.systemDefault()))
-
-                // Success
-            } catch (e: Exception) {
-                // Manage error
-            }
-
-            date = date.plusDays(1)
-        }
-    }
+func getLastSleepDate() {
+  let date: Date? = extractionManager.getLastExtractionDate(of: RookDataType.sleepSummary)
 }
 
 ```
