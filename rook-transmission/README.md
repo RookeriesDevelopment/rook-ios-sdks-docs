@@ -2,13 +2,16 @@
 
 # Rook Transmission SDK
 
-This SDK allows apps to transmit Health Data to the ROOK server.
+This SDK allows to transmit Health Data to the ROOK server.
 
 ## Features
 
-- Upload sleep summaries
-- Upload physical summaries
-- Upload body summaries
+- Store, retrieve and upload sleep summaries
+- Store, retrieve and upload physical summaries
+- Store, retrieve and upload body summaries
+- Store, retrieve and upload heart rate events
+- Store, retrieve and upload oxygenation events
+- Store, retrieve and upload activity events
 
 ## Installation
 
@@ -51,17 +54,16 @@ func application(_ application: UIApplication
 TransmissionSettings.shared.setUserId(with: "USER-ID")
 ```
 
-### Enqueue
-
-There are three main classes responsible for managing health data. Each class contains a function to enqueue, get and upload a summary. The table below lists all of the classes.
+There are six main classes responsible for managing health data. Each class contains a function to enqueue, get and upload a summary. The table below lists all of the classes.
 
 | Class name | Description |
 | ---------- | ----------- |
 | `SleepTransmissionManager` | This class manages the sleep data. |
 | `PhysicalTransmissionManager` | This class manges the physical data. |
 | `BodyTransmissionManager` | This class manages th body data. |
-
-Enqueued data will be stored in an internal database until it is uploaded.
+| `HeartRateEventTransmissionManager` | This class manages th body data. |
+| `OxygenationEventTransmissionManager` | This class manages th body data. |
+| `ActivityEventTransmissionManager` | This class manages th body data. |
 
 #### SleepTransmissionManager
 
@@ -264,3 +266,44 @@ func uploadBodyData() {
   }
 }
 ```
+
+#### HeartRateEventTransmissionManager
+
+The Access point to transmit the heart rate events to the rook server
+
+Use `HeartRateEventTransmissionManager` to store, retrieve and upload heart rate events.
+
+| Function | Description |
+| -------- | ----------- |
+| `public func enqueueHrEvent(_ eventData: Data, completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new heart rate events that comes from RookAppleHealth SDK |
+| `public func enqueueHrEvents(_ events: [RookHeartRateEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookHeartRateEventTransmission` objects |
+| `public func getHrEventsStored(completion: @escaping (Result<[RookHeartRateEventTransmission], Error>) -> Void)` | Returns an array of `RookHeartRateEventTransmission` objects stored locally when the user was in an activity session |
+| `public func getBodyHrEventsStored(completion: @escaping (Result<[RookHeartRateEventTransmission], Error>) -> Void)` | Returns an array of `RookHeartRateEventTransmission` objects stored locally when the user was not in an activity session. |
+| `public func uploadHrEvents(completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads all the heart rate events stored locally and deletes all that were uploaded successfully |
+
+#### OxygenationEventTransmissionManager
+
+The Access point to transmit the oxygenation events to the rook server
+
+Use `OxygenationEventTransmissionManager`  to store new, retrieve and upload oxygenation events.
+
+| Function | Description |
+| -------- | ----------- |
+| `public func enqueueOxygenationEvent(_ eventData: Data, completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new oxygenation events that comes from RookAppleHealth SDK |
+| `public func enqueueOxygenationEvents(_ events: [RookOxygenationEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookOxygenationEventTransmission` objects. |
+| `public func getBodyOxygenationEvents(completion: @escaping (Result<[RookOxygenationEventTransmission], Error>) -> Void)` | Returns an array of `RookOxygenationEventTransmission` objects stored locally when the user was not in an activity session. |
+| `public func getOxygenationEvents(completion: @escaping (Result<[RookOxygenationEventTransmission], Error>) -> Void)` | Returns an array of `RookOxygenationEventTransmission` objects stored locally when the user was in an activity session |
+| `public func uploadEvent(completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads all the oxygenation events stored locally and deletes all that  were uploaded successfully. |
+
+#### ActivityEventTransmissionManager
+
+The Access point to transmit the activity events to the rook server
+
+Use `ActivityEventTransmissionManager` to store new, retrieve and upload activity events.
+
+| Function | Description |
+| -------- | ----------- |
+| `public func enqueActivityEvent(_ eventData: Data, completion: @escaping (Result<Bool,Error>) -> Void)` | Stores new activity events that comes from RookAppleHealth SDK. |
+| `public func enqueueActitivtyEvents(_ events: [RookActivityEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookActivityEventTransmission` objects. |
+| `public func getActivityEvents(completion: @escaping (Result<[RookActivityEventTransmission], Error>) -> Void)` | Returns an array of `RookActivityEventTransmission` objects stored locally. |
+| `public func uploadEvents(completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads all the activity events stored locally and deletes all that were uploaded successfully. |
