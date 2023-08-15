@@ -48,12 +48,6 @@ func application(_ application: UIApplication
 }
 ```
 
-**Note: remember to set the user id using the below method**
-
-```swift
-TransmissionSettings.shared.setUserId(with: "USER-ID")
-```
-
 There are six main classes responsible for managing health data. Each class contains a function to enqueue, get and upload a summary. The table below lists all of the classes.
 
 | Class name | Description |
