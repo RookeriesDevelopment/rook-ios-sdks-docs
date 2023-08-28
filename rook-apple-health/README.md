@@ -10,6 +10,9 @@ This SDK enables apps to extract data from Apple Health . `rook_apple_health_con
 - Retrieve a [Sleep Summary](https://docs.tryrook.io/docs/DataStructure/SleepHealth#summaries) from a specific day.
 - Retrieve a [Physical Summary](https://docs.tryrook.io/docs/DataStructure/PhysicalHealth#summaries) from a specific day.
 - Retrieve a [Body Summary](https://docs.tryrook.io/docs/DataStructure/BodyHealth#summaries) from a specific day.
+- Retrieve heart rate events from a specific day [Physical heart rate events](https://tryrook.stoplight.io/docs/rookconnect/branches/main/97891bb230394-physical-health-events-heart-rate-event) [Body heart rate events]().
+- Retrieve oxygenation events from a specific day [Physical oxygenation events]() [Body oxygenation events]().
+- Retrieve [Activity event](https://tryrook.stoplight.io/docs/rookconnect/branches/main/81eefce6f514f-physical-health-events-activity-event) upload activity events from a specific day.
 
 ## Installation
 
