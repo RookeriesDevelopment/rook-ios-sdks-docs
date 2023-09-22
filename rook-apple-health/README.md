@@ -10,9 +10,6 @@ This SDK enables apps to extract data from Apple Health . `rook_apple_health_con
 - Retrieve a [Sleep Summary](https://docs.tryrook.io/docs/DataStructure/SleepHealth#summaries) from a specific day.
 - Retrieve a [Physical Summary](https://docs.tryrook.io/docs/DataStructure/PhysicalHealth#summaries) from a specific day.
 - Retrieve a [Body Summary](https://docs.tryrook.io/docs/DataStructure/BodyHealth#summaries) from a specific day.
-- Retrieve heart rate events from a specific day [Physical heart rate events](https://tryrook.stoplight.io/docs/rookconnect/branches/main/97891bb230394-physical-health-events-heart-rate-event) [Body heart rate events](https://tryrook.stoplight.io/docs/rookconnect/branches/main/ecbad78dec089-body-health-events-heart-rate-event).
-- Retrieve oxygenation events from a specific day [Physical oxygenation events](https://tryrook.stoplight.io/docs/rookconnect/branches/main/39313dec30eea-physical-health-events-oxygenation-event) [Body oxygenation events](https://tryrook.stoplight.io/docs/rookconnect/branches/main/823ba9cab978d-body-health-events-oxygenation-event).
-- Retrieve [Activity event](https://tryrook.stoplight.io/docs/rookconnect/branches/main/81eefce6f514f-physical-health-events-activity-event) upload activity events from a specific day.
 
 ## Installation
 
@@ -124,6 +121,7 @@ To get health data, create a instance of the class `RookAHExtractionManager` tha
 | getBodySummary(date: Date, completion: @escaping (Result<RookBodyData, Error>) -> Void) | Retrieves in the completion block the body data of the user or an error. |
 | getUserInformation(date: Date, completion: @escaping (Result<RookUserInfoData, Error>)) | Retrieves in the completion block the user information data or an error. |
 | getLastExtractionDate(of summary: RookDataType) -> Date? | Returns the last date extraction of the summary |
+| getUserTimeZone(completion: @escaping (Result<RookUserTimeZone, Error>) -> Void) | Retrieves in the completion block the current user's time zone or an error. |
 
 For example, if you want to get yesterday's sleep summary, call `getSleepSummary`. It will return a `RookSleepData` instance or return an error.
 
