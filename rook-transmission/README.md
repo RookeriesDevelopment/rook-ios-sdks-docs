@@ -12,6 +12,7 @@ This SDK allows to transmit Health Data to the ROOK server.
 - Store, retrieve and upload heart rate events
 - Store, retrieve and upload oxygenation events
 - Store, retrieve and upload activity events
+- Upload current user's time zone 
 
 ## Installation
 
@@ -301,3 +302,13 @@ Use `ActivityEventTransmissionManager` to store new, retrieve and upload activit
 | `public func enqueueActitivtyEvents(_ events: [RookActivityEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookActivityEventTransmission` objects. |
 | `public func getActivityEvents(completion: @escaping (Result<[RookActivityEventTransmission], Error>) -> Void)` | Returns an array of `RookActivityEventTransmission` objects stored locally. |
 | `public func uploadEvents(completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads all the activity events stored locally and deletes all that were uploaded successfully. |
+
+#### TimeZoneManager
+
+The Access point to transmit current time zone
+
+Use `TimeZoneManager` to upload the current user's time zone
+
+| Function | Description |
+| -------- | ----------- |
+| `uploadUserTimeZone(timezone: String, offset: Int, completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads the user's time zone, a user have to be added before use this method. |
