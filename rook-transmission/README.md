@@ -24,7 +24,7 @@ To add a package dependency to your Xcode project, select File > Swift Packages 
 
 To configure Rook Connect Transmission, you need to follow this steps:
 
-1. Import th apple health sdk
+1. Import the apple health sdk
 
 ```swift
 import RookConnectTransmission
@@ -49,16 +49,36 @@ func application(_ application: UIApplication
 }
 ```
 
+#### TransmissionSettings
+
+`TransmissionSettings` configures the sdk before start using the sdk and init the sdk
+
+| Function | Description |
+| -------- | ----------- |
+| `setConfiguration(_ configuration: RookTransmissionConfiguration)` | Sets the configuration with `RookTransmissionConfiguration` object |
+| `setEnvironment(_ environment: RookTransmissionEnvironment)` | Sets the environment. |
+| `setUserId(_ id: String?)` | Sets the user id. |
+| `initRookTransmission()` | Initializes the sdk and validates if the credentials are correct |
+| `isTransmissionAvailable() -> Bool` | Returns a Bool value indicating if the sdk is available to use. |
+
+**Note: remember to set the environment, If the environment is not set, the sdk will work in sandbox**
+
+**Note: remember to set the user id using the below method**
+
+```swift
+TransmissionSettings.shared.setUserId(with: "USER-ID")
+```
+
 There are six main classes responsible for managing health data. Each class contains a function to enqueue, get and upload a summary. The table below lists all of the classes.
 
 | Class name | Description |
 | ---------- | ----------- |
 | `SleepTransmissionManager` | This class manages the sleep data. |
-| `PhysicalTransmissionManager` | This class manges the physical data. |
-| `BodyTransmissionManager` | This class manages th body data. |
-| `HeartRateEventTransmissionManager` | This class manages th body data. |
-| `OxygenationEventTransmissionManager` | This class manages th body data. |
-| `ActivityEventTransmissionManager` | This class manages th body data. |
+| `PhysicalTransmissionManager` | This class manages the physical data. |
+| `BodyTransmissionManager` | This class manages the body data. |
+| `HeartRateEventTransmissionManager` | This class manages the body data. |
+| `OxygenationEventTransmissionManager` | This class manages the body data. |
+| `ActivityEventTransmissionManager` | This class manages the body data. |
 
 #### SleepTransmissionManager
 
@@ -108,7 +128,7 @@ func storeSleepSummary() {
 }
 ```
 
-Remember all the dates and datetimes will be send in ISO-8601 format and UTC timezone.
+Remember all the dates and date times will be send in ISO-8601 format and UTC timezone.
 
 
 ### Syncing Sleep data
@@ -298,8 +318,8 @@ Use `ActivityEventTransmissionManager` to store new, retrieve and upload activit
 
 | Function | Description |
 | -------- | ----------- |
-| `public func enqueActivityEvent(_ eventData: Data, completion: @escaping (Result<Bool,Error>) -> Void)` | Stores new activity events that comes from RookAppleHealth SDK. |
-| `public func enqueueActitivtyEvents(_ events: [RookActivityEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookActivityEventTransmission` objects. |
+| `public func enqueueActivityEvent(_ eventData: Data, completion: @escaping (Result<Bool,Error>) -> Void)` | Stores new activity events that comes from RookAppleHealth SDK. |
+| `public func enqueueActivityEvents(_ events: [RookActivityEventTransmission], completion: @escaping (Result<Bool, Error>) -> Void)` | Stores new physical data using an array of `RookActivityEventTransmission` objects. |
 | `public func getActivityEvents(completion: @escaping (Result<[RookActivityEventTransmission], Error>) -> Void)` | Returns an array of `RookActivityEventTransmission` objects stored locally. |
 | `public func uploadEvents(completion: @escaping (Result<Bool, Error>) -> Void)` | Uploads all the activity events stored locally and deletes all that were uploaded successfully. |
 

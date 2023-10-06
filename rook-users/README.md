@@ -1,4 +1,4 @@
-# Rook Users SDK
+# RookUserSDK
 
 This SDK allows the [client](https://docs.tryrook.io/docs/Definitions/#client) to register their [Users](https://docs.tryrook.io/docs/Definitions/#User) in ROOK server.
 
@@ -17,7 +17,7 @@ To add a package dependency to your Xcode project, select File > Swift Packages 
 
 To configure Rook Users, you need to follow this steps:
 
-1. Import the rook users sdk
+1. Import the apple health sdk
 
 ```swift
 import RookConnectTransmission
@@ -31,8 +31,7 @@ import RookUsersSDK
 func application(_ application: UIApplication
                  didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     
-    RookUsersConfiguration.shared.setConfiration(
-      urlAPI: "https://api.rook.dev",
+    RookUsersConfiguration.shared.setConfiguration(
       clientUUID: "9593d0ec-2222-3333-444-10d3f4f43127",
       secretKey: "YdwdwQ3mP0zey5nZ9w3WHQMfijewjslfjleis")
     
@@ -43,6 +42,19 @@ func application(_ application: UIApplication
 ```
 
 ## Usage
+
+### RookUserConfiguration
+
+`RookUserConfiguration` configures the sdk and init before start using it.
+This class conforms the singleton pattern, use the shared property to access it.
+
+| Function | Description |
+| -------- | ----------- |
+| `setConfiguration(urlAPI: String, clientUUID: String, secretKey: String)` | Sets the configuration with  your `clientUUID` and `secreteKey` parameters |
+| `setEnvironment(_ environment: RookUsersEnvironment)` | Sets the configuration to the environment given. |
+| `initRookUsers(completion: @escaping (Result<Bool, Error>) -> Void)` | Initializes the sdk and validates if the credentials are correct |
+
+**Note: remember to set the environment, If the environment is not set, the sdk will work in sandbox**
 
 Create an instance of `RookUserManager`
 
@@ -64,7 +76,7 @@ func addUserToAppleHealth() {
     userManager.registerRookUser(with: userId) { result in
       switch result {
       case .success(let success):
-        debugPrint("user added succesfully \(success)")
+        debugPrint("user added successfully \(success)")
       case .failure(let failure):
         debugPrint("error while adding a user \(failure)")
       }
